@@ -72,6 +72,11 @@ cd src-tauri && cargo fmt --check && cargo clippy -- -D warnings && cargo check 
 - **No linter configured** — the `react-ts` template ships none. Add ESLint or Biome if desired.
 - Frontend builds and type-checks under TS 6 (verified); the Rust build is unverified until the toolchain is installed.
 
+## Security
+
+- Public repo. Secret scanning runs in CI (gitleaks) and locally via `.githooks/pre-commit` — enable once per clone: `git config core.hooksPath .githooks`.
+- CI (`.github/workflows/ci.yml`) runs type-check, build, and `cargo fmt`/`clippy`/`check`/`test` on every push and PR. Dependabot keeps deps current. See `SECURITY.md`.
+
 ## Adding an MCP server
 
 This repo ships no MCP servers. To add a team-shared one, create `.mcp.json` at the root (committed) with a `mcpServers` object; reference secrets via `${ENV_VAR}`, never hardcoded.
