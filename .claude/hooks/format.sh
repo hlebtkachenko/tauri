@@ -11,8 +11,8 @@ file_path="$(python3 -c 'import sys, json; print(json.load(sys.stdin).get("tool_
 [ -f "$file_path" ] || exit 0
 
 case "$file_path" in
-  *.ts|*.tsx|*.js|*.jsx|*.json|*.css|*.html)
-    npx --no-install prettier --write "$file_path" >/dev/null 2>&1 || true
+  *.ts|*.tsx|*.js|*.jsx|*.json|*.jsonc|*.css)
+    npx --no-install biome format --write "$file_path" >/dev/null 2>&1 || true
     ;;
   *.rs)
     rustfmt --edition 2021 "$file_path" >/dev/null 2>&1 || true

@@ -8,8 +8,8 @@ Run the project's verification sequence and report results. Stop at the first fa
 ## Frontend (from project root)
 
 ```bash
-npx tsc --noEmit
-npx eslint src 2>/dev/null || echo "eslint not configured"
+npm run lint        # Biome: lint + format check + import order
+npx tsc --noEmit    # type-check
 ```
 
 ## Rust (from src-tauri/)

@@ -42,6 +42,8 @@ npm run tauri build        # production bundle
 npm run dev                # Vite dev server only (no Tauri window)
 npm run build              # tsc type-check + vite build
 npx tsc --noEmit           # type-check only
+npm run lint               # Biome: lint + format check + import order
+npm run format             # Biome: autofix (format + safe lint fixes)
 
 # Rust (from src-tauri/) — requires the Rust toolchain
 cargo check
@@ -70,7 +72,7 @@ cd src-tauri && cargo fmt --check && cargo clippy -- -D warnings && cargo check 
 
 - **This is a reusable scaffold.** After copying for a new project, run `scripts/rename.sh <app-name> [bundle-id]` to re-stamp the package/crate/identifier from the resting identity (`tauri-starter` / `com.hleb.starter`). See `README.md`.
 - **Rust required** — install `cargo`/`rustc` via `rustup` (https://www.rust-lang.org/tools/install) if not present.
-- **No linter configured** — the `react-ts` template ships none. Add ESLint or Biome if desired.
+- **Linter/formatter: Biome** (`biome.json`) — `npm run lint` (check) / `npm run format` (autofix). Runs in CI and via the PostToolUse hook.
 - Frontend (tsc + vite) and Rust (`cargo check`) builds are verified in CI.
 
 ## Security
