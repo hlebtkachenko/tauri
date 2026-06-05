@@ -1,0 +1,2 @@
+# tauri
+Tauri App Project
