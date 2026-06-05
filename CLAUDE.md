@@ -25,4 +25,4 @@ This checkout is a Conductor workspace (a git worktree of `repos/tauri`). Target
 
 ## Status
 
-Scaffolded: Tauri 2.x + React 19 + TypeScript 6 + Vite. The Rust toolchain (`cargo`/`rustc`) is **not yet installed** — required for `tauri dev`/`build`; install via `rustup`. No linter is configured yet. The frontend type-checks and builds under TS 6.
+Reusable Tauri 2.x scaffold (React 19 + TypeScript 6 + Vite). After copying for a new project, run `scripts/rename.sh <app-name> [bundle-id]` to re-stamp names (resting identity: `tauri-starter` / `com.hleb.starter`). Requires Rust (`cargo`/`rustc`) via `rustup`. No linter configured yet. Frontend and Rust builds verified in CI.
