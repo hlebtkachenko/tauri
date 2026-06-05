@@ -19,12 +19,12 @@ A Tauri 2.x desktop application: Rust backend + React 19 / TypeScript 6 frontend
 │   ├── App.tsx
 │   └── assets/
 └── src-tauri/              # Rust backend — all Tauri config lives here
-    ├── Cargo.toml          # crate `tauri-app`, lib `tauri_app_lib`
+    ├── Cargo.toml          # crate `tauri-starter`, lib `tauri_starter_lib`
     ├── build.rs            # tauri_build::build()
-    ├── tauri.conf.json     # app id `com.hleb.tauri`, devUrl, bundle
+    ├── tauri.conf.json     # app id `com.hleb.starter`, devUrl, bundle
     ├── src/
     │   ├── lib.rs          # app code + #[tauri::command]s + run()
-    │   └── main.rs         # desktop entry — calls tauri_app_lib::run()
+    │   └── main.rs         # desktop entry — calls tauri_starter_lib::run()
     ├── capabilities/       # permission grants for JS→Rust commands
     └── icons/
 ```
@@ -66,11 +66,12 @@ cd src-tauri && cargo fmt --check && cargo clippy -- -D warnings && cargo check 
 - `tauri.conf.json` lives in `src-tauri/`, not the project root.
 - Never commit secrets (`.env`, `*.key`, `*.enc`, `client_secret*.json`). Agents are denied read/edit access in `.claude/settings.json`.
 
-## Status / not yet set up
+## Scaffold notes
 
-- **Rust toolchain not installed** — `cargo`/`rustc` are required for `tauri dev`/`build`. Install via `rustup` (https://www.rust-lang.org/tools/install) or `brew install rustup-init && rustup-init`.
+- **This is a reusable scaffold.** After copying for a new project, run `scripts/rename.sh <app-name> [bundle-id]` to re-stamp the package/crate/identifier from the resting identity (`tauri-starter` / `com.hleb.starter`). See `README.md`.
+- **Rust required** — install `cargo`/`rustc` via `rustup` (https://www.rust-lang.org/tools/install) if not present.
 - **No linter configured** — the `react-ts` template ships none. Add ESLint or Biome if desired.
-- Frontend builds and type-checks under TS 6 (verified); the Rust build is unverified until the toolchain is installed.
+- Frontend (tsc + vite) and Rust (`cargo check`) builds are verified in CI.
 
 ## Security
 
