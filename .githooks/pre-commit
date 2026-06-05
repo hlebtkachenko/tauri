@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Block secrets from being committed (gitleaks staged scan).
+# Enable once per clone: git config core.hooksPath .githooks
+if ! command -v gitleaks >/dev/null 2>&1; then
+  echo "warning: gitleaks not installed; skipping secret scan (brew install gitleaks)" >&2
+  exit 0
+fi
+exec gitleaks git --staged --redact --verbose
