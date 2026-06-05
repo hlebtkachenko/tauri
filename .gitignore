@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Frontend build output
+dist/
+build/
+
+# Tauri / Rust build output
+src-tauri/target/
+
+# Environment & secrets
+.env
+.env.*
+*.key
+*.enc
+client_secret*.json
+
+# Claude Code personal overrides
+.claude/settings.local.json
+
+# Local junk (move deletions here; never permanent-delete)
+_junk/
+
+# OS / editor
+.DS_Store
+*.log
+
+# MCP scratch
+.playwright-mcp/
