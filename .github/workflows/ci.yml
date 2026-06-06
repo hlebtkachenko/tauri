@@ -23,6 +23,10 @@ jobs:
 
   rust:
     runs-on: ubuntu-latest
+    env:
+      # clingo-rs static build: pin the CMake policy (vendored clingo predates CMake 4, which
+      # dropped <3.5 compat) so it configures on runners with CMake >= 4; harmless on CMake 3.x.
+      CMAKE_POLICY_VERSION_MINIMUM: "3.5"
     steps:
       - uses: actions/checkout@v6
       - name: Install Tauri system dependencies
@@ -35,7 +39,11 @@ jobs:
             libxdo-dev \
             libssl-dev \
             libgtk-3-dev \
-            libayatana-appindicator3-dev
+            libayatana-appindicator3-dev \
+            cmake \
+            clang \
+            libclang-dev \
+            llvm-dev
       - uses: actions/setup-node@v6
         with:
           node-version: "22"
