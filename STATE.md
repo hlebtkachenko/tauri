@@ -11,7 +11,11 @@ research-power `master` `src/` + `solver/` + `docs/tauri-handoff.md`.
 - **P1 ✅** engine core in `src-tauri/src/engine/` (types, topics, solve [clingo-rs], gate, budget, extract,
   route, claude). `cargo test` 26/26; clippy `-D warnings` + fmt clean; **solve-vs-gold == Python baseline**
   both topics. Advisor-gated: semantically faithful + fail-closed (no panic on the hot path).
-- **Next:** P2 store (rusqlite) + learn loop + gold scorer · P3 Tauri commands + specta bindings + Channel ·
+- **P2 ✅** SQLite store (rusqlite bundled) + continual-learning loop (`store.rs`, `gold.rs`, `learn.rs`).
+  `cargo test` 42/42; clippy + fmt clean. Advisor security review (memory-poisoning): **no path to
+  trusted+injected** for a blocked lesson; gate fail-closed on scorer-error/empty-gold/regression/missing
+  provenance+§; provisional never retrieved.
+- **Next:** P3 Tauri commands + specta bindings + Channel ·
   P4 React UI (ask · correct · review · manage-knowledge) · P5 bundle + run · P6 check:all · then reviews + CI
   + push main.
 
