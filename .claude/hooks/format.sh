@@ -11,7 +11,7 @@ file_path="$(python3 -c 'import sys, json; print(json.load(sys.stdin).get("tool_
 [ -f "$file_path" ] || exit 0
 
 case "$file_path" in
-  *.ts|*.tsx|*.js|*.jsx|*.json|*.jsonc|*.css)
+  *.ts|*.tsx|*.js|*.jsx|*.json|*.jsonc)
     npx --no-install biome format --write "$file_path" >/dev/null 2>&1 || true
     ;;
   *.rs)

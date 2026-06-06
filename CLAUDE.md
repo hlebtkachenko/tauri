@@ -9,7 +9,7 @@ Claude Code reads this file; the shared project instructions live in `AGENTS.md`
 `AGENTS.md` is guidance (advisory context). Hard rules are enforced in `.claude/settings.json`:
 
 - **Permissions**: `src/`, `src-tauri/`, and config files are editable; reading or editing secrets (`.env`, `*.key`, `*.enc`, `client_secret*.json`) is denied, as are `git push`, `rm -rf`, and `sudo`. Deny rules always win over allow.
-- **Hook**: a `PostToolUse` hook (`.claude/hooks/format.sh`) runs `prettier`/`rustfmt` on edited files. It is a safe no-op until the toolchain is installed.
+- **Hook**: a `PostToolUse` hook (`.claude/hooks/format.sh`) runs Biome/`rustfmt` on edited files. Safe no-op until the toolchain is installed.
 
 ## .claude/ layout
 
@@ -25,4 +25,4 @@ This checkout is a Conductor workspace (a git worktree of `repos/tauri`). Target
 
 ## Status
 
-Reusable Tauri 2.x scaffold (React 19 + TypeScript 6 + Vite). After copying for a new project, run `scripts/rename.sh <app-name> [bundle-id]` to re-stamp names (resting identity: `tauri-starter` / `com.hleb.starter`). Requires Rust (`cargo`/`rustc`) via `rustup`. No linter configured yet. Frontend and Rust builds verified in CI.
+Reusable Tauri 2.x scaffold: React 19 + TypeScript 6 + Vite, Tailwind v4 + shadcn/ui (hex theme), Biome lint/format, plugins (opener/store/window-state), and desktop batteries. After copying for a new project, run `scripts/rename.sh <app-name> [bundle-id]` (resting identity: `tauri-starter` / `com.hleb.starter`). Requires Rust (`cargo`/`rustc`) via `rustup`. Frontend + Rust builds verified in CI.
