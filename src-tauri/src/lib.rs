@@ -1,3 +1,5 @@
+mod engine;
+
 use tauri_specta::{collect_commands, Builder};
 
 // Example typed command. Frontend calls it via the generated, fully-typed

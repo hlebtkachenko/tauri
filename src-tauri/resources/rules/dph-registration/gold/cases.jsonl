@@ -1,0 +1,3 @@
+{"id": "reg-over-threshold", "cz": "Obrat firmy za 12 po sobě jdoucích měsíců přesáhl limit pro povinnou registraci k DPH.", "facts": ["turnover_over_threshold(yes)"], "expect": {"status": "solved", "decision": "must_register", "citations": ["§6"]}}
+{"id": "reg-under-threshold", "cz": "Obrat firmy je pod limitem pro povinnou registraci k DPH.", "facts": ["turnover_over_threshold(no)"], "expect": {"status": "solved", "decision": "not_required", "citations": ["§6"]}}
+{"id": "reg-abstain-unknown", "cz": "Firma se ptá na registraci k DPH, ale výši obratu neuvádí.", "facts": [], "expect": {"status": "abstain"}}

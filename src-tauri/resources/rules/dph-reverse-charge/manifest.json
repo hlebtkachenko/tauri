@@ -1,0 +1,13 @@
+{
+  "id": "dph-reverse-charge",
+  "ruleset": "dph_reverse_charge",
+  "description": "Czech VAT (DPH) domestic reverse-charge, §92a-§92e: who accounts for VAT when a VAT-payer supplies an enumerated category (e.g. construction-assembly work) to another VAT-payer with place of supply in the Czech Republic.",
+  "systemPrompt": "You extract structured facts for the Czech VAT (DPH) domestic reverse-charge rule (§92a-§92e) from a case description. First, briefly reason in plain text about each fact the case actually states. Then output the structured fields. For each field use exactly one of the allowed values, or \"unknown\" when the case does not clearly state it. Use \"other\" when the case states a value that is simply not the listed one (e.g. ordinary goods like furniture → supply_category=\"other\"). Never guess: if a value is not stated at all, use \"unknown\".",
+  "slots": {
+    "supplier_vat": { "enum": ["payer", "nonpayer"], "factTemplate": "vat_status(supplier, {})" },
+    "customer_vat": { "enum": ["payer", "nonpayer"], "factTemplate": "vat_status(customer, {})" },
+    "place_of_supply": { "enum": ["czech_republic", "other"], "factTemplate": "place_of_supply({})" },
+    "supply_category": { "enum": ["construction_assembly", "other"], "factTemplate": "supply_category({})" }
+  },
+  "tags": ["dph", "reverse-charge", "vat"]
+}

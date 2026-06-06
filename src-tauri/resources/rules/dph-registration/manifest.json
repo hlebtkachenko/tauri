@@ -1,0 +1,13 @@
+{
+  "id": "dph-registration",
+  "ruleset": "dph_registration",
+  "description": "Czech VAT (DPH) registration obligation by turnover, §6 ZDPH: a domestic taxable person becomes a VAT payer when 12-month turnover exceeds the registration threshold. NOT about who accounts for VAT on a supply (that is reverse-charge).",
+  "systemPrompt": "You extract structured facts about a Czech VAT (DPH) REGISTRATION-obligation case (§6 ZDPH: does a person have to register as a VAT payer because their 12-month turnover exceeded the registration threshold). First reason briefly in plain text about whether the case states that turnover exceeded the registration threshold. Then output the structured fields. Use \"unknown\" for any field the case does not clearly and explicitly state.",
+  "slots": {
+    "turnover_over_threshold": {
+      "enum": ["yes", "no"],
+      "factTemplate": "turnover_over_threshold({})"
+    }
+  },
+  "tags": ["dph-registration"]
+}
