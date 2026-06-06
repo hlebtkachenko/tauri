@@ -9,7 +9,9 @@
     "preview": "vite preview",
     "tauri": "tauri",
     "lint": "biome check",
-    "format": "biome check --write"
+    "format": "biome check --write",
+    "check:all": "biome check && tsc --noEmit && cargo fmt --manifest-path src-tauri/Cargo.toml --check && cargo clippy --manifest-path src-tauri/Cargo.toml -- -D warnings && cargo check --manifest-path src-tauri/Cargo.toml && cargo test --manifest-path src-tauri/Cargo.toml",
+    "fix:all": "biome check --write && cargo fmt --manifest-path src-tauri/Cargo.toml"
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.2.9",
