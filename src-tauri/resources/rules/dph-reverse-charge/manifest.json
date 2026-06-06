@@ -6,8 +6,14 @@
   "slots": {
     "supplier_vat": { "enum": ["payer", "nonpayer"], "factTemplate": "vat_status(supplier, {})" },
     "customer_vat": { "enum": ["payer", "nonpayer"], "factTemplate": "vat_status(customer, {})" },
-    "place_of_supply": { "enum": ["czech_republic", "other"], "factTemplate": "place_of_supply({})" },
-    "supply_category": { "enum": ["construction_assembly", "other"], "factTemplate": "supply_category({})" }
+    "place_of_supply": {
+      "enum": ["czech_republic", "other"],
+      "factTemplate": "place_of_supply({})"
+    },
+    "supply_category": {
+      "enum": ["construction_assembly", "other"],
+      "factTemplate": "supply_category({})"
+    }
   },
   "tags": ["dph", "reverse-charge", "vat"]
 }

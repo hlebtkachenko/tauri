@@ -15,7 +15,7 @@ pub const STATUS_CONFLICT: &str = "conflict";
 pub const STATUS_SCHEMA_INVALID: &str = "schema_invalid";
 
 /// The regulated answer, or a refusal. The single thing the gate produces.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, specta::Type)]
 #[serde(tag = "kind", rename_all = "snake_case")]
 pub enum Outcome {
     Answer {
@@ -30,7 +30,7 @@ pub enum Outcome {
 
 /// One slot in a topic's FIXED vocabulary. Lives in `manifest.json` (data, not code),
 /// so a new accounting area is a drop-in module — never an engine edit.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, specta::Type)]
 pub struct SlotSpec {
     /// Allowed values (excludes "unknown").
     #[serde(rename = "enum")]
@@ -41,7 +41,7 @@ pub struct SlotSpec {
 }
 
 /// A single accounting topic (e.g. DPH reverse-charge), loaded from a rules module.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, specta::Type)]
 pub struct Topic {
     /// Module id, e.g. "dph-reverse-charge".
     pub id: String,
@@ -69,7 +69,7 @@ pub struct SolverResult {
 }
 
 /// Engine error. Every fallible boundary maps to one of these or to an abstain.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, specta::Type)]
 pub enum EngineError {
     /// A topic-module manifest or rules file could not be read or parsed.
     Topics(String),
@@ -106,7 +106,7 @@ impl std::error::Error for EngineError {}
 /// A token-space lesson distilled from a `fact_mapping` correction (ACE-style: kept as
 /// data, delta-updated via helpful/harmful counters, never a weight update). Retrieved
 /// k≈1 by tag and injected as a few-shot example into future extraction once TRUSTED.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, specta::Type)]
 pub struct StrategyItem {
     pub title: String,
     pub description: String,
@@ -117,7 +117,7 @@ pub struct StrategyItem {
 /// Staged trust. v1 has exactly two states (ADR-0006): a freshly distilled lesson is
 /// `Provisional` and only a human approval (refused unless the gate passed) makes it
 /// `Trusted` and therefore retrievable.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, specta::Type)]
 #[serde(rename_all = "snake_case")]
 pub enum TrustState {
     Provisional,
@@ -143,7 +143,7 @@ impl TrustState {
 
 /// The correction type decides what gets learned (ADR-0007): only `FactMapping` becomes a
 /// strategy item; `RuleDefect`/`VocabularyGap` edit the symbolic moat and route to a human.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, specta::Type)]
 #[serde(rename_all = "snake_case")]
 pub enum CorrectionType {
     FactMapping,
@@ -173,7 +173,7 @@ impl CorrectionType {
 }
 
 /// Every solve, persisted as the raw material a correction attaches to.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, specta::Type)]
 pub struct Episode {
     pub id: String,
     pub created_at: String,
@@ -187,7 +187,7 @@ pub struct Episode {
 }
 
 /// Fields of an `Episode` minus the store-assigned `id` and `created_at`.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, specta::Type)]
 pub struct EpisodeInput {
     pub topic: Option<String>,
     pub question: String,
@@ -199,7 +199,7 @@ pub struct EpisodeInput {
 }
 
 /// An expert correction attached to an episode.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, specta::Type)]
 pub struct Correction {
     pub id: String,
     pub created_at: String,
@@ -214,7 +214,7 @@ pub struct Correction {
 }
 
 /// Fields of a `Correction` minus the store-assigned `id` and `created_at`.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, specta::Type)]
 pub struct CorrectionInput {
     pub episode_id: String,
     #[serde(rename = "type")]
@@ -227,7 +227,7 @@ pub struct CorrectionInput {
 
 /// Where a strategy item came from. An item with no `episode_id`/`correction_id` is an
 /// orphan (self-generated, unattributable) and the verification gate blocks it.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default, specta::Type)]
 pub struct Provenance {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub episode_id: Option<String>,
@@ -238,7 +238,7 @@ pub struct Provenance {
 
 /// The verification-gate verdict. Approval is refused unless `passed` is true — a poisoned
 /// lesson cannot be promoted even by a human.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, specta::Type)]
 pub struct GateResult {
     pub passed: bool,
     /// Why it failed (empty when passed).
@@ -249,7 +249,7 @@ pub struct GateResult {
 
 /// A `StrategyItem` enriched with store/learning metadata: identity, staged trust,
 /// provenance, delta counters, the gate verdict, and the human approval stamp.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, specta::Type)]
 pub struct StoredStrategyItem {
     pub id: String,
     pub created_at: String,
@@ -259,8 +259,10 @@ pub struct StoredStrategyItem {
     pub tags: Vec<String>,
     pub trust_state: TrustState,
     pub provenance: Provenance,
-    pub helpful: i64,
-    pub harmful: i64,
+    // Delta counters (ACE-style helpful/harmful). `i32` so the bindings export to a plain
+    // TS `number`; specta-typescript forbids `i64` (BigInt-style) to avoid precision loss.
+    pub helpful: i32,
+    pub harmful: i32,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gate: Option<GateResult>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -283,7 +285,7 @@ impl StoredStrategyItem {
 
 /// Fields of a `StoredStrategyItem` minus the store-assigned `id` and `created_at`.
 /// `add_strategy_item` takes this and stamps identity + timestamp.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, specta::Type)]
 pub struct StrategyItemInput {
     pub title: String,
     pub description: String,
@@ -291,8 +293,8 @@ pub struct StrategyItemInput {
     pub tags: Vec<String>,
     pub trust_state: TrustState,
     pub provenance: Provenance,
-    pub helpful: i64,
-    pub harmful: i64,
+    pub helpful: i32,
+    pub harmful: i32,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gate: Option<GateResult>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -306,8 +308,8 @@ pub struct StrategyItemInput {
 #[derive(Debug, Clone, Default)]
 pub struct StrategyItemPatch {
     pub trust_state: Option<TrustState>,
-    pub helpful: Option<i64>,
-    pub harmful: Option<i64>,
+    pub helpful: Option<i32>,
+    pub harmful: Option<i32>,
     pub gate: Option<GateResult>,
     pub approved_by: Option<String>,
     pub approved_at: Option<String>,

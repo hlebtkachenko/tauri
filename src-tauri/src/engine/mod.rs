@@ -15,6 +15,7 @@
 #![allow(dead_code)]
 
 pub mod budget;
+pub mod classify;
 pub mod claude;
 pub mod extract;
 pub mod gate;

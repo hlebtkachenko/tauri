@@ -520,8 +520,8 @@ struct RawStrategy {
     tags: String,
     trust_state: String,
     provenance: String,
-    helpful: i64,
-    harmful: i64,
+    helpful: i32,
+    harmful: i32,
     gate: Option<String>,
     approved_by: Option<String>,
     approved_at: Option<String>,
@@ -619,7 +619,7 @@ mod tests {
         );
     }
 
-    fn add_item(s: &SqliteStore, content: &str, ts: TrustState, score: i64) -> StoredStrategyItem {
+    fn add_item(s: &SqliteStore, content: &str, ts: TrustState, score: i32) -> StoredStrategyItem {
         s.add_strategy_item(StrategyItemInput {
             title: content.to_string(),
             description: "d".to_string(),

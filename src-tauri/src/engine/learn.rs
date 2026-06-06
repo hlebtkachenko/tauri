@@ -35,8 +35,8 @@ pub struct Draft {
     pub tags: Vec<String>,
     pub trust_state: TrustState,
     pub provenance: Provenance,
-    pub helpful: i64,
-    pub harmful: i64,
+    pub helpful: i32,
+    pub harmful: i32,
 }
 
 impl Draft {

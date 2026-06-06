@@ -15,7 +15,11 @@ research-power `master` `src/` + `solver/` + `docs/tauri-handoff.md`.
   `cargo test` 42/42; clippy + fmt clean. Advisor security review (memory-poisoning): **no path to
   trusted+injected** for a blocked lesson; gate fail-closed on scorer-error/empty-gold/regression/missing
   provenance+§; provisional never retrieved.
-- **Next:** P3 Tauri commands + specta bindings + Channel ·
+- **P3 ✅** Tauri commands + typed bindings + progress Channel. `engine/classify.rs` (the `ask` pipeline,
+  fail-closed → always an Outcome, store lock never across `.await`) + commands `ask`/`submit_correction`/
+  `approve`/`list_topics`/`recent_episodes`/`list_strategy_items` (tauri-specta, regenerated `src/lib/bindings.ts`).
+  `npm run check:all` GREEN (42/42 + biome + tsc + clippy + fmt). Advisor-gated fail-closed.
+- **Next:** P4 React UI (ask · correct · review · manage-knowledge) ·
   P4 React UI (ask · correct · review · manage-knowledge) · P5 bundle + run · P6 check:all · then reviews + CI
   + push main.
 
