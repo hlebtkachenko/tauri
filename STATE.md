@@ -19,7 +19,11 @@ research-power `master` `src/` + `solver/` + `docs/tauri-handoff.md`.
   fail-closed → always an Outcome, store lock never across `.await`) + commands `ask`/`submit_correction`/
   `approve`/`list_topics`/`recent_episodes`/`list_strategy_items` (tauri-specta, regenerated `src/lib/bindings.ts`).
   `npm run check:all` GREEN (42/42 + biome + tsc + clippy + fmt). Advisor-gated fail-closed.
-- **Next:** P4 React UI (ask · correct · review · manage-knowledge) ·
+- **P4 ✅** React UI — 4 shadcn surfaces (`src/components/asmara/{ask,correct,review,manage}-tab.tsx` + tabbed
+  `App.tsx`): Ask (live stage progress via Channel → answer/abstain card), Correct (→ gate verdict), Review
+  (approve disabled unless `gate.passed`), Manage (topics + episodes). `check:all` GREEN + `vite build` OK.
+  Advisor-gated: ask never shows a raw error (fail-closed to abstain); async handlers try/finally; approve gated.
+- **Next:** P5 bundle + run ·
   P4 React UI (ask · correct · review · manage-knowledge) · P5 bundle + run · P6 check:all · then reviews + CI
   + push main.
 
