@@ -4,7 +4,7 @@ Shared instructions for AI coding agents (Claude Code, Cursor, Codex, etc.) work
 
 ## Project
 
-A Tauri 2.x desktop application: Rust backend + React 19 / TypeScript 6 frontend (Vite).
+A Tauri 2.x desktop application: Rust backend + React 19 / TypeScript 6 frontend (Vite), styled with Tailwind v4 + shadcn/ui.
 
 ## Structure
 
@@ -12,20 +12,24 @@ A Tauri 2.x desktop application: Rust backend + React 19 / TypeScript 6 frontend
 .
 ├── index.html              # frontend entry
 ├── package.json
-├── vite.config.ts
+├── vite.config.ts          # React + Tailwind v4 plugins, @/ alias
 ├── tsconfig.json
+├── components.json         # shadcn/ui config
 ├── src/                    # React + TypeScript frontend
-│   ├── main.tsx            # React entry
+│   ├── main.tsx            # React entry (imports index.css)
 │   ├── App.tsx
-│   └── assets/
+│   ├── index.css           # Tailwind v4 entry + shadcn theme (hex, not oklch)
+│   ├── components/ui/      # shadcn/ui components (you own these)
+│   ├── hooks/              # e.g. use-external-links.ts
+│   └── lib/utils.ts        # cn() helper
 └── src-tauri/              # Rust backend — all Tauri config lives here
     ├── Cargo.toml          # crate `tauri-starter`, lib `tauri_starter_lib`
     ├── build.rs            # tauri_build::build()
     ├── tauri.conf.json     # app id `com.hleb.starter`, devUrl, bundle
     ├── src/
-    │   ├── lib.rs          # app code + #[tauri::command]s + run()
+    │   ├── lib.rs          # plugins + on_page_load (flash fix) + run()
     │   └── main.rs         # desktop entry — calls tauri_starter_lib::run()
-    ├── capabilities/       # permission grants for JS→Rust commands
+    ├── capabilities/       # default.json + desktop.json (JS→Rust grants)
     └── icons/
 ```
 
@@ -68,11 +72,27 @@ cd src-tauri && cargo fmt --check && cargo clippy -- -D warnings && cargo check 
 - `tauri.conf.json` lives in `src-tauri/`, not the project root.
 - Never commit secrets (`.env`, `*.key`, `*.enc`, `client_secret*.json`). Agents are denied read/edit access in `.claude/settings.json`.
 
+## UI
+
+- **Tailwind v4** (`@tailwindcss/vite`) + **shadcn/ui** (Radix-based). Theme lives in `src/index.css` as **hex** CSS variables (project rule — not oklch), light + `.dark`.
+- Add components: `npx shadcn@latest add <name>` → lands in `src/components/ui/`, which you own and edit. Use `cn()` from `@/lib/utils`; icons via `lucide-react`.
+- Import via the `@/` alias (e.g. `@/components/ui/button`).
+
+## Tauri plugins
+
+Wired: `opener`, `store`, `window-state`. Add more with `npm run tauri add <plugin>` (auto-edits Cargo.toml, lib.rs, capabilities). Plugins are deny-by-default — the matching `<plugin>:default` permission must be present in a capability file under `src-tauri/capabilities/`.
+
+## Desktop batteries
+
+- **No startup white flash**: window created hidden (`visible: false`), shown on page-load (`on_page_load` in `lib.rs`).
+- **External links** open in the system browser (`useExternalLinks` hook + `plugin-opener`).
+- **Desktop feel**: body scroll/overscroll locked and text selection disabled except in inputs (`index.css`).
+
 ## Scaffold notes
 
 - **This is a reusable scaffold.** After copying for a new project, run `scripts/rename.sh <app-name> [bundle-id]` to re-stamp the package/crate/identifier from the resting identity (`tauri-starter` / `com.hleb.starter`). See `README.md`.
 - **Rust required** — install `cargo`/`rustc` via `rustup` (https://www.rust-lang.org/tools/install) if not present.
-- **Linter/formatter: Biome** (`biome.json`) — `npm run lint` (check) / `npm run format` (autofix). Runs in CI and via the PostToolUse hook.
+- **Linter/formatter: Biome** (`biome.json`) — `npm run lint` / `npm run format`. Runs in CI + the PostToolUse hook. CSS is excluded (Tailwind v4 owns `src/index.css`).
 - Frontend (tsc + vite) and Rust (`cargo check`) builds are verified in CI.
 
 ## Security
