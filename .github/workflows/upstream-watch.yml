@@ -24,7 +24,7 @@ jobs:
         run: |
           set -euo pipefail
           installed=$(grep -A1 '^name = "tauri"$' src-tauri/Cargo.lock | grep '^version' | head -1 | cut -d'"' -f2)
-          latest=$(curl -fsSL -H "User-Agent: tauri-starter-upstream-watch" \
+          latest=$(curl -fsSL -H "User-Agent: tauri-upstream-watch (github actions)" \
             https://crates.io/api/v1/crates/tauri | jq -r '.crate.max_stable_version')
           echo "installed=$installed latest=$latest"
 
