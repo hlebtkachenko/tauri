@@ -110,6 +110,11 @@ Tag `v*` (e.g. `npm version patch && git push --follow-tags`) → `.github/workf
 - Public repo. Secret scanning runs in CI (gitleaks) and locally via `.githooks/pre-commit` — enable once per clone: `git config core.hooksPath .githooks`.
 - CI (`.github/workflows/ci.yml`) runs type-check, build, and `cargo fmt`/`clippy`/`check`/`test` on every push and PR. Dependabot keeps deps current. See `SECURITY.md`.
 
+## Dependencies & upstream
+
+- **Dependabot** (`.github/dependabot.yml`) opens weekly PRs for npm, Cargo, and GitHub Actions; Tauri crates/packages are grouped into single PRs.
+- **Upstream watch** (`.github/workflows/upstream-watch.yml`) runs weekly: if the `tauri` crate is behind its latest release, it opens/updates a tracking issue with the changelog link. Also runnable on demand (Actions → upstream-watch → Run workflow).
+
 ## Adding an MCP server
 
 This repo ships no MCP servers. To add a team-shared one, create `.mcp.json` at the root (committed) with a `mcpServers` object; reference secrets via `${ENV_VAR}`, never hardcoded.
