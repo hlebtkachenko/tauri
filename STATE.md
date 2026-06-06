@@ -23,7 +23,16 @@ research-power `master` `src/` + `solver/` + `docs/tauri-handoff.md`.
   `App.tsx`): Ask (live stage progress via Channel → answer/abstain card), Correct (→ gate verdict), Review
   (approve disabled unless `gate.passed`), Manage (topics + episodes). `check:all` GREEN + `vite build` OK.
   Advisor-gated: ask never shows a raw error (fail-closed to abstain); async handlers try/finally; approve gated.
-- **Next:** P5 bundle + run ·
+- **P5 ✅** Packaged macOS app. Runtime rules path (`topics.rs` OnceLock + `lib.rs` `set_rules_dir` from the
+  Tauri `resource_dir`; dev/test fallback) + review-queue runtime path (`learn.rs` `set_data_dir` → app data
+  dir). `tauri.conf.json` identifier `cz.hapd.asmara`, productName Asmara, `bundle.resources` for rules, no
+  app-sandbox. `npm run tauri build` → `Asmara.app` + dmg; launches clean, rules bundled at
+  `Contents/Resources/resources/rules/`. **Live end-to-end verified** (Rust `live_ask_construction` ignored
+  test): real `claude` → APPLIES §92a/§92e. check:all GREEN.
+  - **Deployment follow-up (V5 auth):** the live ask works in dev / terminal-launched context (claude reads its
+    keychain session). A Finder-launched `.app` may need `CLAUDE_CODE_OAUTH_TOKEN` (from `claude setup-token`)
+    injected — `claude.rs` already uses it if present; plumbing a settings UI for it is a follow-up.
+- **Next:** P6 check:all · M3 reviews · M4 push main.
   P4 React UI (ask · correct · review · manage-knowledge) · P5 bundle + run · P6 check:all · then reviews + CI
   + push main.
 

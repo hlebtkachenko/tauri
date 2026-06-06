@@ -4,15 +4,29 @@
 
 use std::fs;
 use std::path::{Path, PathBuf};
+use std::sync::OnceLock;
 
 use super::types::{EngineError, Topic};
 
-/// Root of the bundled rules modules. For tests/dev this resolves relative to the crate;
-/// the Tauri-resource path is a later phase.
+/// Process-global base path for the bundled rules modules. Set once at app startup
+/// (`set_rules_dir`) to the Tauri resource dir inside the packaged .app. When unset
+/// (cargo tests, `tauri dev`), `rules_dir()` falls back to the compile-time crate path.
+static RULES_DIR: OnceLock<PathBuf> = OnceLock::new();
+
+/// Point the topic loader at the runtime rules directory (the bundled Tauri resource dir).
+/// Called from `lib.rs` `.setup(...)`. No-op if already set.
+pub fn set_rules_dir(p: PathBuf) {
+    let _ = RULES_DIR.set(p);
+}
+
+/// Root of the bundled rules modules. Returns the runtime path set via `set_rules_dir`
+/// (packaged app), else falls back to the compile-time crate path (tests/dev).
 fn rules_dir() -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR"))
-        .join("resources")
-        .join("rules")
+    RULES_DIR.get().cloned().unwrap_or_else(|| {
+        Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("resources")
+            .join("rules")
+    })
 }
 
 fn load_from(dir: &Path) -> Result<Vec<Topic>, EngineError> {

@@ -199,9 +199,17 @@ pub fn run() {
         })
         .setup(move |app| {
             builder.mount_events(app);
+            // Point the topic loader at the bundled rules inside the .app. Fail-closed: if
+            // the resource dir can't be resolved, leave the loader on its dev fallback (a
+            // packaged app with no rules → topics empty → asks abstain, which is safe).
+            if let Ok(resource_dir) = app.path().resource_dir() {
+                engine::topics::set_rules_dir(resource_dir.join("resources/rules"));
+            }
             // Open (or create) the store at the app data dir; manage it as shared state.
             let data_dir = app.path().app_data_dir().expect("resolve app data dir");
             std::fs::create_dir_all(&data_dir).expect("create app data dir");
+            // The human-review queue (non-FactMapping corrections) writes here in the .app.
+            engine::learn::set_data_dir(data_dir.clone());
             let db_path = data_dir.join("asmara.sqlite3");
             let store = SqliteStore::open(&db_path.to_string_lossy()).expect("open sqlite store");
             app.manage(Mutex::new(store));

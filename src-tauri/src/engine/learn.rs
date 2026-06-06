@@ -16,6 +16,7 @@
 use std::fs::{create_dir_all, OpenOptions};
 use std::io::Write;
 use std::path::{Path, PathBuf};
+use std::sync::OnceLock;
 
 use super::gold::{GoldScore, Scorer};
 use super::store::Store;
@@ -66,12 +67,24 @@ impl Draft {
     }
 }
 
-/// The review queue for non-`FactMapping` corrections: a human-readable markdown checklist
-/// under the repo's `.context/`. These edit the symbolic moat and are never applied
-/// autonomously.
+/// Process-global data dir for human-review artifacts. Set once at app startup (the Tauri
+/// app data dir); falls back to the crate `.context/` for cargo tests + `tauri dev`.
+static DATA_DIR: OnceLock<PathBuf> = OnceLock::new();
+
+/// Point the review queue at the runtime data directory (the Tauri app data dir). Called from
+/// `lib.rs` `.setup(...)`. No-op if already set. Without it (dev/tests) the fallback is used.
+pub fn set_data_dir(p: PathBuf) {
+    let _ = DATA_DIR.set(p);
+}
+
+/// The review queue for non-`FactMapping` corrections: a human-readable markdown checklist.
+/// Written under the runtime data dir in the packaged app (the crate `.context/` in dev/tests).
+/// These edit the symbolic moat and are never applied autonomously.
 fn review_queue_path() -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR"))
-        .join(".context")
+    DATA_DIR
+        .get()
+        .cloned()
+        .unwrap_or_else(|| Path::new(env!("CARGO_MANIFEST_DIR")).join(".context"))
         .join("review-queue.md")
 }
 

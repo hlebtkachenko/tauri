@@ -158,3 +158,40 @@ fn episode_for(
         citations,
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // Live end-to-end smoke test: drives the real `claude` CLI on the subscription through the
+    // full Rust pipeline (route → extract → solve → gate). Ignored by default (costs money +
+    // needs auth); run with: cargo test --manifest-path src-tauri/Cargo.toml live_ask -- --ignored --nocapture
+    #[tokio::test]
+    #[ignore = "live: spawns the claude CLI on the OAuth subscription"]
+    async fn live_ask_construction() {
+        let on_progress = |stage: &str| println!("[stage] {stage}");
+        let retrieve = |_: &[String], _: usize| Ok(Vec::new());
+        let record = |_: EpisodeInput| {};
+        let out = ask(
+            "A Czech VAT-payer does construction-assembly work for another Czech VAT-payer in Prague",
+            "2026-06-06",
+            &on_progress,
+            retrieve,
+            record,
+        )
+        .await;
+        println!("OUTCOME: {out:?}");
+        match out {
+            Outcome::Answer {
+                decision,
+                citations,
+                ..
+            } => {
+                assert_eq!(decision, "reverse_charge_applies");
+                assert!(citations.contains(&"§92a".to_string()));
+                assert!(citations.contains(&"§92e".to_string()));
+            }
+            Outcome::Abstain { reason } => panic!("expected answer, got abstain: {reason}"),
+        }
+    }
+}
