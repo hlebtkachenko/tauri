@@ -92,8 +92,7 @@ fn submit_correction(
     state: State<'_, StoreState>,
     input: CorrectionInput,
 ) -> Result<SubmitResult, EngineError> {
-    let as_of = "".to_string();
-    let scorer = LiveScorer::new(as_of);
+    let scorer = LiveScorer::new();
     let store = state.lock().map_err(|_| poisoned())?;
     let out = learn::submit_correction(&*store, input, &scorer)?;
     Ok(SubmitResult {

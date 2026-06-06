@@ -95,16 +95,14 @@ pub fn correct(
 /// The production scorer: run every topic's gold cases through the full pipeline with the
 /// `extra` examples injected, like gold.ts `scoreGold(depsWithExamples(extra))`. Calls the
 /// `claude` CLI (route + extract), so this is NOT unit-tested.
-pub struct LiveScorer {
-    /// As-of date for rule selection (the local path reads rules from the topic module).
-    pub as_of_date: String,
-}
+/// Stateless: the local path reads rules from the topic module file (date selection is a
+/// full-stack DB concern), so the scorer carries no fields.
+#[derive(Default)]
+pub struct LiveScorer;
 
 impl LiveScorer {
-    pub fn new(as_of_date: impl Into<String>) -> Self {
-        LiveScorer {
-            as_of_date: as_of_date.into(),
-        }
+    pub fn new() -> Self {
+        LiveScorer
     }
 
     /// Run a single gold case through extract → solve → gate (topic already chosen), with

@@ -5,8 +5,9 @@
 // implementation, opening either a file path or an in-memory db. The schema ports
 // db/0001_init.sql to SQLite: INTEGER/TEXT columns, ISO-8601 TEXT timestamps, JSON-encoded
 // TEXT for arrays/objects, TEXT CHECK enums, pgvector dropped (v1 retrieval is tag-based,
-// ADR-0006). A `budget` table persists the cost guard across runs (replaces P1's
-// per-process Budget).
+// ADR-0006). A `budget` table is the SEAM for cross-run cost persistence — it is NOT yet
+// wired; the ACTIVE guard is the per-process `Budget` in budget.rs (resets each ask). Wiring
+// cross-run enforcement (the C2 metering concern) is a documented follow-up.
 //
 // rusqlite is SYNCHRONOUS: every method is a plain blocking `fn`. The Connection is !Send,
 // so a SqliteStore must never be held across an `.await`. Fail-closed: every rusqlite/JSON
@@ -47,7 +48,7 @@ pub trait Store {
         k: usize,
     ) -> Result<Vec<StrategyItem>, EngineError>;
 
-    // --- budget (persisted cost guard; replaces P1's per-process Budget) ---
+    // --- budget (cross-run persistence SEAM; not yet wired — per-process Budget is active) ---
     fn budget_get(&self) -> Result<(u64, f64), EngineError>;
     /// Pre-call gate: increments the call count and persists it. Caller enforces caps.
     fn budget_charge_call(&self) -> Result<(), EngineError>;

@@ -32,7 +32,23 @@ research-power `master` `src/` + `solver/` + `docs/tauri-handoff.md`.
   - **Deployment follow-up (V5 auth):** the live ask works in dev / terminal-launched context (claude reads its
     keychain session). A Finder-launched `.app` may need `CLAUDE_CODE_OAUTH_TOKEN` (from `claude setup-token`)
     injected — `claude.rs` already uses it if present; plumbing a settings UI for it is a follow-up.
-- **Next:** P6 check:all · M3 reviews · M4 push main.
+- **M3 ✅** Final review (correctness + security + simplify across the 5-commit diff): **no correctness or
+  security bug** (fail-closed core + memory-poisoning gate intact; SQL parameterized; claude env clean). Applied:
+  removed dead `LiveScorer.as_of_date`; corrected the false "persisted budget replaces per-process" comments.
+
+### Follow-ups (from the M3 review — not blockers, deferred)
+- **#1 (concurrency):** `submit_correction` holds the store `Mutex` across the multi-minute LLM gate (the gold
+  sweep). Single-user-tolerable (one action at a time); for concurrency, split learn's API so verify runs
+  off-lock. 
+- **#2 (budget):** the persisted `budget` table is an unwired SEAM; the per-process `Budget` is the active
+  guard. Wire cross-run enforcement when C2 metering bites.
+- **#3:** narrow the crate-wide `#![allow(dead_code)]` once #2 is wired (currently masks the budget seam).
+- **#5:** `solve.rs` parses atoms by string strip (fine for today's nullary args; reparse via `sym.name()`/
+  `.arguments()` if a future rule emits compound args). **#7:** rename the crate off `tauri-starter` (careful —
+  the lib name is build-load-bearing). **#6:** minor gate-render UI dup. **#8/#9:** cosmetic.
+
+- **Next:** M4 — update `.github/workflows/ci.yml` for the clingo build (cmake + libclang + CMAKE policy), push
+  to main of the tauri repo, CI green.
   P4 React UI (ask · correct · review · manage-knowledge) · P5 bundle + run · P6 check:all · then reviews + CI
   + push main.
 
