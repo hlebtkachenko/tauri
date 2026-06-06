@@ -100,7 +100,9 @@ Tag `v*` (e.g. `npm version patch && git push --follow-tags`) → `.github/workf
 
 ## Scaffold notes
 
-- **This is a reusable scaffold.** After copying for a new project, run `scripts/rename.sh <app-name> [bundle-id]` to re-stamp the package/crate/identifier from the resting identity (`tauri-starter` / `com.hleb.starter`). See `README.md`.
+<!-- starter:remove-start -->
+- **This is a reusable scaffold.** After copying for a new project, run `scripts/rename.sh <app-name> [bundle-id]` to re-stamp the package/crate/identifier (resting identity: `tauri-starter` / `com.hleb.starter`). See `README.md` and the "Using this starter" block in `CLAUDE.md`.
+<!-- starter:remove-end -->
 - **Rust required** — install `cargo`/`rustc` via `rustup` (https://www.rust-lang.org/tools/install) if not present.
 - **Linter/formatter: Biome** (`biome.json`) — `npm run lint` / `npm run format`. Runs in CI + the PostToolUse hook. CSS is excluded (Tailwind v4 owns `src/index.css`).
 - Frontend (tsc + vite) and Rust (`cargo check`) builds are verified in CI.

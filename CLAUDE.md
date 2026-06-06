@@ -4,6 +4,23 @@
 
 Claude Code reads this file; the shared project instructions live in `AGENTS.md` (imported above). The notes below are Claude-specific.
 
+<!-- starter:remove-start -->
+## Using this starter (new project)
+
+This repo is a reusable scaffold. To start a new project from a copy:
+
+```bash
+cp -R tauri-starter my-app && cd my-app
+rm -rf .git node_modules dist src-tauri/target src-tauri/Cargo.lock
+./scripts/rename.sh my-app com.hleb.my-app "My App"   # restamps code + docs
+git init && git config core.hooksPath .githooks
+npm install && npm run tauri dev
+```
+
+`scripts/rename.sh` rewrites the package/crate/bundle-id/product name across code and docs and removes this section. **Rule for agents:** if the `package.json` name is still `tauri-starter`, you are in the template — run rename first. Otherwise this is already the real project; build normally.
+<!-- starter:remove-end -->
+
+
 ## Enforcement vs. guidance
 
 `AGENTS.md` is guidance (advisory context). Hard rules are enforced in `.claude/settings.json`:
@@ -25,4 +42,4 @@ This checkout is a Conductor workspace (a git worktree of `repos/tauri`). Target
 
 ## Status
 
-Reusable Tauri 2.x scaffold: React 19 + TypeScript 6 + Vite, Tailwind v4 + shadcn/ui (hex theme), Biome lint/format, plugins (opener/store/window-state), and desktop batteries. After copying for a new project, run `scripts/rename.sh <app-name> [bundle-id]` (resting identity: `tauri-starter` / `com.hleb.starter`). Requires Rust (`cargo`/`rustc`) via `rustup`. Frontend + Rust builds verified in CI.
+Stack: Tauri 2.x · React 19 · TypeScript 6 · Vite · Tailwind v4 + shadcn/ui (hex) · tauri-specta typed IPC · Biome · plugins (opener/store/window-state) · desktop batteries. Requires Rust (`cargo`/`rustc`) via `rustup`. Frontend + Rust builds verified in CI.
