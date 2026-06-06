@@ -48,6 +48,8 @@ npm run build              # tsc type-check + vite build
 npx tsc --noEmit           # type-check only
 npm run lint               # Biome: lint + format check + import order
 npm run format             # Biome: autofix (format + safe lint fixes)
+npm run check:all          # full gate: Biome + tsc + cargo fmt/clippy/check/test
+npm run fix:all            # autofix: Biome + cargo fmt
 
 # Rust (from src-tauri/) — requires the Rust toolchain
 cargo check
@@ -82,11 +84,19 @@ cd src-tauri && cargo fmt --check && cargo clippy -- -D warnings && cargo check 
 
 Wired: `opener`, `store`, `window-state`. Add more with `npm run tauri add <plugin>` (auto-edits Cargo.toml, lib.rs, capabilities). Plugins are deny-by-default — the matching `<plugin>:default` permission must be present in a capability file under `src-tauri/capabilities/`.
 
+## Typed IPC (tauri-specta)
+
+Rust commands are defined in `lib.rs` with `#[tauri::command] #[specta::specta]` and registered via `collect_commands!`. tauri-specta generates a fully-typed `src/lib/bindings.ts`; call commands from the frontend as `commands.<name>(...)` instead of stringly-typed `invoke`. Bindings regenerate on every `npm run tauri dev` and via `cargo test` (committed to the repo; excluded from Biome).
+
 ## Desktop batteries
 
 - **No startup white flash**: window created hidden (`visible: false`), shown on page-load (`on_page_load` in `lib.rs`).
 - **External links** open in the system browser (`useExternalLinks` hook + `plugin-opener`).
 - **Desktop feel**: body scroll/overscroll locked and text selection disabled except in inputs (`index.css`).
+
+## Releases
+
+Tag `v*` (e.g. `npm version patch && git push --follow-tags`) → `.github/workflows/release.yml` builds installers for macOS (arm64 + x64), Windows, and Linux via `tauri-action` and opens a draft GitHub release. Release binaries use a size-optimized Cargo profile (`lto`, `strip`). Signed auto-updates are optional — see `SECURITY.md`.
 
 ## Scaffold notes
 

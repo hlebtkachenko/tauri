@@ -15,3 +15,4 @@ Report security issues privately via GitHub's "Report a vulnerability" (reposito
 - `src-tauri/tauri.conf.json` ships `app.security.csp: null` (scaffold default). Before release, set a restrictive Content Security Policy. A strict CSP can break the Vite dev server (HMR, inline assets), so tune it against `npm run tauri dev`.
 - Only commands granted in `src-tauri/capabilities/` are reachable from the frontend. Keep that allowlist minimal.
 - Never commit secrets; `.gitignore` and the pre-commit hook guard against `.env` files and keys.
+- **Auto-updates**: `.github/workflows/release.yml` is updater-ready. To enable signed updates, generate a key with `npx tauri signer generate`, add `TAURI_SIGNING_PRIVATE_KEY` (and its password) as repo secrets, set the public key + endpoints under `plugins.updater` in `tauri.conf.json`, and register the `updater` plugin. Without a key, releases build unsigned and auto-update stays off.
